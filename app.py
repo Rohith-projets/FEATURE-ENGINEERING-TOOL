@@ -5,7 +5,8 @@ from feature_engine.selection import *
 from FEATURE_SELECTION import *
 from SELECTORS import *
 from CREATORS import *
-
+if "count" not in st.session_state:
+  st.session_state['count']=0
 class Features:
     def __init__(self, data):
         self.dataset = data
@@ -40,7 +41,7 @@ class Features:
                             st.error(e)
         
         with tab2:
-            pass
+            st.dataframe(self.dataset)
     def create_features(self):
         tab1,tab2=st.tabs(["Perform Operations","View Data"])
         with tab1:
@@ -84,6 +85,6 @@ file_uploader = st.sidebar.file_uploader("Upload CSV", type=['csv'])
 if file_uploader:
     dataframe = pd.read_csv(file_uploader)
     st.session_state['readed_csv'] = dataframe
-    selected_output = st.selectbox("Outputs to select", [x for x in st.session_state.keys() if x])
+    selected_output = st.selectbox("Outputs to select", [x for x in st.session_state.keys() if x !="count"])
     if selected_output:
-        Features(st.session_state['readed_csv']).display()
+        Features(st.session_state[selected_output]).display()
